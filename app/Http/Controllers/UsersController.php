@@ -10,7 +10,7 @@ class UsersController extends Controller
 {
     
     
-     public function followings($id)
+    public function followings($id)
     {
         $user = User::find($id);
         $followings = $user->followings()->paginate(10);
@@ -49,7 +49,7 @@ class UsersController extends Controller
         ]);
     }
     
-     public function show($id)
+    public function show($id)
     {
         $user = User::find($id);
         $microposts = $user->microposts()->orderBy('created_at', 'desc')->paginate(10);
@@ -63,4 +63,36 @@ class UsersController extends Controller
 
         return view('users.show', $data);
     }
+    
+    
+        //ここからfavorite機能
+    public function favorites($id)
+    {
+        $user = User::find($id);
+        $favorites = $user->favorites()->paginate(10);
+
+        $data = [
+            'user' => $user,
+            'microposts' => $favorites,
+        ];
+
+        $data += $this->counts($user);
+        return view('users.favorites', $data);
+    }
+/*
+    public function favoriters($id)
+    {
+        $user = User::find($id);
+        $favoriters = $user->favoriters()->paginate(10);
+
+        $data = [
+            'user' => $user,
+            'users' => $favoriters,
+        ];
+
+        $data += $this->counts($user);
+
+        return view('users.favoriters', $data);
+    }
+    */
 }
